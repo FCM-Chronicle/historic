@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- 로그인 화면 -->
     <div id="loginScreen" class="screen">
       <h1>🏛️ 한국사 퀴즈</h1>
       <div class="login-box">
@@ -31,10 +30,9 @@
       </div>
     </div>
 
-    <!-- 퀴즈 화면 -->
     <div id="quizScreen" class="screen hidden">
       <div class="quiz-header">
-        <div class="progress"><span id="current">1</span> / 30</div>
+        <div class="progress"><span id="current">1</span> / 15</div>
         <div class="timer" id="timer">00:00</div>
       </div>
       <div class="quiz-content">
@@ -45,7 +43,6 @@
       <button id="submitBtn" onclick="submitQuiz()" class="hidden">제출</button>
     </div>
 
-    <!-- 결과 화면 -->
     <div id="resultScreen" class="screen hidden">
       <h1>🎉 완료!</h1>
       <div class="result-card">
