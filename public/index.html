@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏛️ 한국사 퀴즈</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 로그인 화면 -->
+    <div id="loginScreen" class="screen">
+      <h1>🏛️ 한국사 퀴즈</h1>
+      <div class="login-box">
+        <h2>퀴즈 도전하기</h2>
+        <input type="text" id="nicknameInput" placeholder="닉네임 입력" maxlength="10">
+        <button onclick="startQuiz()">시작하기</button>
+      </div>
+      <div class="ranking-box">
+        <h2>🏆 TOP 10 랭킹</h2>
+        <div class="ranking-table">
+          <div class="ranking-header">
+            <div>순위</div>
+            <div>닉네임</div>
+            <div>점수</div>
+            <div>정답</div>
+            <div>시간</div>
+          </div>
+          <div id="rankingList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 퀴즈 화면 -->
+    <div id="quizScreen" class="screen hidden">
+      <div class="quiz-header">
+        <div class="progress"><span id="current">1</span> / 30</div>
+        <div class="timer" id="timer">00:00</div>
+      </div>
+      <div class="quiz-content">
+        <h2 id="question"></h2>
+        <div id="options" class="options"></div>
+      </div>
+      <button id="nextBtn" onclick="nextQuestion()" class="hidden">다음</button>
+      <button id="submitBtn" onclick="submitQuiz()" class="hidden">제출</button>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="resultScreen" class="screen hidden">
+      <h1>🎉 완료!</h1>
+      <div class="result-card">
+        <div class="result-item">
+          <div class="label">정답</div>
+          <div class="value" id="correctResult"></div>
+        </div>
+        <div class="result-item">
+          <div class="label">시간</div>
+          <div class="value" id="timeResult"></div>
+        </div>
+        <div class="result-item">
+          <div class="label">점수</div>
+          <div class="value score" id="scoreResult"></div>
+        </div>
+      </div>
+      <div class="result-buttons">
+        <button onclick="saveRanking()">🏆 랭킹 등록</button>
+        <button onclick="goHome()" class="secondary">🏠 홈으로</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
