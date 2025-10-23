@@ -137,8 +137,66 @@ function submitQuiz() {
   document.getElementById('timeResult').textContent = `${Math.floor(time/60)}분 ${time%60}초`;
   document.getElementById('scoreResult').textContent = `${score}점`;
   
+  // 문제 복습 생성
+  displayReview();
+  
   window.quizResult = { correct, time, score };
   showScreen('resultScreen');
+}
+
+// 문제 복습 표시 (틀린 문제 먼저)
+function displayReview() {
+  const reviewList = document.getElementById('reviewList');
+  
+  // 틀린 문제와 맞은 문제 분리
+  const wrongQuestions = [];
+  const correctQuestions = [];
+  
+  questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.answer;
+    const reviewItem = {
+      index: i,
+      question: q,
+      userAnswer: userAnswers[i],
+      isCorrect: isCorrect
+    };
+    
+    if (isCorrect) {
+      correctQuestions.push(reviewItem);
+    } else {
+      wrongQuestions.push(reviewItem);
+    }
+  });
+  
+  // 틀린 문제 + 맞은 문제 순서로 표시
+  const allReviews = [...wrongQuestions, ...correctQuestions];
+  
+  reviewList.innerHTML = allReviews.map(item => `
+    <div class="review-item ${item.isCorrect ? 'correct' : 'wrong'}">
+      <div class="review-header">
+        <span class="review-number">문제 ${item.index + 1}</span>
+        <span class="review-badge ${item.isCorrect ? 'badge-correct' : 'badge-wrong'}">
+          ${item.isCorrect ? '✓ 정답' : '✗ 오답'}
+        </span>
+      </div>
+      <div class="review-question">${item.question.question}</div>
+      <div class="review-answers">
+        <div class="review-answer">
+          <strong>정답:</strong> <span class="answer-text">${item.question.answer}</span>
+        </div>
+        ${!item.isCorrect && item.userAnswer ? `
+          <div class="review-answer user-wrong">
+            <strong>내 답:</strong> <span class="answer-text">${item.userAnswer}</span>
+          </div>
+        ` : ''}
+        ${!item.userAnswer ? `
+          <div class="review-answer user-wrong">
+            <strong>내 답:</strong> <span class="answer-text">미응답</span>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
 }
 
 // 점수 계산 (5분 기준, 15문제)
