@@ -5,13 +5,11 @@ let userAnswers = [];
 let startTime = 0;
 let timerInterval = null;
 
-// 화면 전환
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById(screenId).classList.remove('hidden');
 }
 
-// 랭킹 로드
 async function loadRankings() {
   try {
     const res = await fetch('/api/rankings');
@@ -34,7 +32,6 @@ async function loadRankings() {
   }
 }
 
-// 퀴즈 시작
 async function startQuiz() {
   nickname = document.getElementById('nicknameInput').value.trim();
   if (!nickname) {
@@ -58,7 +55,6 @@ async function startQuiz() {
   }
 }
 
-// 타이머
 function startTimer() {
   timerInterval = setInterval(() => {
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -69,7 +65,6 @@ function startTimer() {
   }, 1000);
 }
 
-// 문제 표시
 function displayQuestion() {
   const q = questions[currentIndex];
   document.getElementById('current').textContent = currentIndex + 1;
@@ -86,13 +81,11 @@ function displayQuestion() {
   updateButtons();
 }
 
-// 선택지 선택
 function selectOption(index) {
   userAnswers[currentIndex] = questions[currentIndex].options[index];
   displayQuestion();
 }
 
-// 버튼 상태
 function updateButtons() {
   const nextBtn = document.getElementById('nextBtn');
   const submitBtn = document.getElementById('submitBtn');
@@ -111,7 +104,6 @@ function updateButtons() {
   }
 }
 
-// 다음 문제
 function nextQuestion() {
   if (currentIndex < 29) {
     currentIndex++;
@@ -119,7 +111,6 @@ function nextQuestion() {
   }
 }
 
-// 제출
 function submitQuiz() {
   const unanswered = userAnswers.filter(a => a === null).length;
   if (unanswered > 0 && !confirm(`${unanswered}개 미응답. 제출할까요?`)) {
@@ -128,12 +119,10 @@ function submitQuiz() {
   
   clearInterval(timerInterval);
   
-  // 정답 계산
   const correct = questions.filter((q, i) => userAnswers[i] === q.answer).length;
   const time = Math.floor((Date.now() - startTime) / 1000);
   const score = calculateScore(correct, time);
   
-  // 결과 표시
   document.getElementById('correctResult').textContent = `${correct} / 30`;
   document.getElementById('timeResult').textContent = `${Math.floor(time/60)}분 ${time%60}초`;
   document.getElementById('scoreResult').textContent = `${score}점`;
@@ -142,14 +131,13 @@ function submitQuiz() {
   showScreen('resultScreen');
 }
 
-// 점수 계산 (무한 상승 가능)
+// 점수 계산 (5분 기준, 무한 상승 가능)
 function calculateScore(correct, time) {
   const baseScore = correct * 100;  // 정답당 100점
-  const timeBonus = Math.max(0, 1800 - time);  // 30분 기준 보너스
+  const timeBonus = Math.max(0, 300 - time);  // 5분(300초) 기준 보너스
   return baseScore + timeBonus;
 }
 
-// 랭킹 저장
 async function saveRanking() {
   const { correct, time, score } = window.quizResult;
   
@@ -167,17 +155,14 @@ async function saveRanking() {
   }
 }
 
-// 홈으로
 function goHome() {
   showScreen('loginScreen');
   loadRankings();
 }
 
-// Enter 키로 시작
 document.getElementById('nicknameInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') startQuiz();
 });
 
-// 초기화
 loadRankings();
 setInterval(loadRankings, 5000);
